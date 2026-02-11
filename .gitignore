@@ -1,0 +1,116 @@
+# ============================================
+# Herald .gitignore
+# ============================================
+
+# ----------------
+# SECRETS & ENV FILES (CRITICAL — never commit these)
+# ----------------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.cert
+*.crt
+*.p12
+*.pfx
+*.jks
+jwt_secret*
+oauth_secret*
+credentials.json
+service-account*.json
+
+# ----------------
+# RUST / BACKEND
+# ----------------
+backend/target/
+**/*.rs.bk
+*.pdb
+
+# ----------------
+# NODE / FRONTEND
+# ----------------
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+frontend/.cache/
+*.tsbuildinfo
+
+# ----------------
+# TERRAFORM (state files contain secrets and resource details)
+# ----------------
+terraform/**/*.tfstate
+terraform/**/*.tfstate.*
+terraform/**/*.tfstate.backup
+terraform/**/.terraform/
+terraform/**/.terraform.lock.hcl
+terraform/**/crash.log
+terraform/**/crash.*.log
+terraform/**/*.tfplan
+terraform/**/override.tf
+terraform/**/override.tf.json
+terraform/**/*_override.tf
+terraform/**/*_override.tf.json
+*.auto.tfvars
+# NOTE: We DO commit terraform.tfvars (non-sensitive env configs)
+# Sensitive values should use environment variables or a secrets manager
+
+# ----------------
+# DOCKER
+# ----------------
+docker-compose.override.yml
+
+# ----------------
+# KUBERNETES / HELM
+# ----------------
+helm/herald/charts/
+helm/**/*.tgz
+
+# ----------------
+# DATABASE
+# ----------------
+*.sql.bak
+*.dump
+pgdata/
+postgres-data/
+
+# ----------------
+# IDE / EDITOR
+# ----------------
+.vscode/settings.json
+.vscode/launch.json
+.vscode/*.code-workspace
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ----------------
+# OS FILES
+# ----------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Desktop.ini
+
+# ----------------
+# LOGS
+# ----------------
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ----------------
+# TESTING / COVERAGE
+# ----------------
+coverage/
+*.lcov
+tarpaulin-report.html
