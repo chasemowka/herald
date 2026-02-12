@@ -5,17 +5,17 @@ use tokio::net::TcpListener;
 use tower_http::cors::CorsLayer;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 use sqlx::PgPool;
-use std::env;
 use tower_http::trace::TraceLayer;    
 
 
-// mod config;
+mod config;
 mod routes;
-pub struct AppState {
-   db: PgPool,
-}
+use config::Config;
 
-const ADDR: &str = "0.0.0.0:8080";
+pub struct AppState {
+   pub db: PgPool,
+   pub config: Config,
+}
 
 
 #[tokio::main]
@@ -30,20 +30,19 @@ async fn main() {
         .init();
 
     // 3. Connect to DB
-    let database_url = env::var("DATABASE_URL")
-        .expect("DATABASE_URL must be set");
+    let config = Config::from_env();
     
     let pool = PgPoolOptions::new()
         .max_connections(5)
-        .connect(&database_url)
+        .connect(&config.database_url)
         .await
         .expect("Failed to connect to DB");
 
     // 4. Run Migrations (Optional)
-    // sqlx::migrate!().run(&pool).await.unwrap();
-
+    sqlx::migrate!().run(&pool).await.unwrap();
+    let addr = format!("{}:{}", config.host, config.port);
     // 5. Create App State
-    let state = Arc::new(AppState { db: pool });
+    let state = Arc::new(AppState { db: pool, config });
     
     //6. Build Application Router with CORS + TraceLayer + state 
     let app = Router::new()
@@ -52,7 +51,7 @@ async fn main() {
         .layer(CorsLayer::permissive())
         .with_state(state);
     // 7. Server Time 
-    let listener = TcpListener::bind(ADDR).await.unwrap();
-    tracing::info!("Server running on {}", ADDR);
+    let listener = TcpListener::bind(&addr).await.unwrap();
+    tracing::info!("Server running on {}", addr);
     axum::serve(listener, app).await.unwrap();
 }
