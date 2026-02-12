@@ -4,3 +4,27 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+axum = "0.7"
+tokio = { version = "1", features = ["full"] }
+tower-http = { version = "0.5", features = ["cors", "trace"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# Databasae (Postgres)
+sqlx = { version = "0.8", features = ["runtime-tokio-native-tls", "postgres", "uuid", "chrono"] }
+
+# Auth
+jsonwebtoken = "9.2"
+
+# RSS Parsing
+feed-rs = "2.0.0-beta.0"
+
+# Utilities associated
+uuid = { version = "1.8", features = ["v4", "serde"] }
+
+# Environment Config 
+dotenvy = "0.15"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+

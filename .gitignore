@@ -19,6 +19,7 @@ jwt_secret*
 oauth_secret*
 credentials.json
 service-account*.json
+CLAUDE.md
 
 # ----------------
 # RUST / BACKEND
@@ -73,6 +74,11 @@ helm/**/*.tgz
 *.dump
 pgdata/
 postgres-data/
+
+# ----------------
+# CLAUDE CODE (local session tracking)
+# ----------------
+CLAUDE.md
 
 # ----------------
 # IDE / EDITOR
