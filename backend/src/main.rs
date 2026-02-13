@@ -17,6 +17,7 @@ mod errors;
 mod services;
 
 use config::Config;
+use services::scheduler::FeedScheduler;
 
 pub struct AppState {
    pub db: PgPool,
@@ -46,17 +47,25 @@ async fn main() {
 
     // 4. Run Migrations (Optional)
     sqlx::migrate!().run(&pool).await.unwrap();
+
+    // 5. Start background feed scheduler
+    let scheduler = FeedScheduler::new(pool.clone());
+    tokio::spawn(async move {
+        scheduler.run().await;
+    });
+    tracing::info!("Feed scheduler started (15 min interval)");
+
     let addr = format!("{}:{}", config.host, config.port);
-    // 5. Create App State
+    // 6. Create App State
     let state = Arc::new(AppState { db: pool, config });
     
-    //6. Build Application Router with CORS + TraceLayer + state 
+    // 7. Build Application Router with CORS + TraceLayer + state
     let app = Router::new()
         .merge(routes::create_routes())
         .layer(TraceLayer::new_for_http())
         .layer(CorsLayer::permissive())
         .with_state(state);
-    // 7. Server Time 
+    // 8. Server Time 
     let listener = TcpListener::bind(&addr).await.unwrap();
     tracing::info!("Server running on {}", addr);
     axum::serve(listener, app).await.unwrap();

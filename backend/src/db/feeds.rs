@@ -137,6 +137,22 @@ pub async fn update_last_fetched(pool: &PgPool, feed_id: Uuid) -> Result<(), sql
     Ok(())
 }
 
+/// Get all feeds that have at least one subscriber (active feeds).
+/// Used by the scheduler to determine which feeds need to be fetched.
+pub async fn get_all_active_feeds(pool: &PgPool) -> Result<Vec<Feed>, sqlx::Error> {
+    sqlx::query_as!(
+        Feed,
+        r#"
+        SELECT DISTINCT f.id, f.title, f.url, f.site_url, f.description, f.topic_id,
+               f.is_curated, f.last_fetched_at, f.created_at, f.updated_at
+        FROM feeds f
+        INNER JOIN user_feeds uf ON f.id = uf.feed_id
+        "#
+    )
+    .fetch_all(pool)
+    .await
+}
+
 /// Get curated feeds for given topics (useful for onboarding).
 pub async fn get_curated_feeds_for_topics(
     pool: &PgPool,

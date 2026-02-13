@@ -5,7 +5,7 @@ use sqlx::types::chrono::{DateTime, Utc};
 use serde::{Serialize, Deserialize};
 
 
-#[derive(Serialize, Deserialize, FromRow)]
+#[derive(Debug, Serialize, Deserialize, FromRow)]
 pub struct Feed {
     pub id: Uuid,
     pub title: String,
