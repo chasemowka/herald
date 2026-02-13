@@ -17,6 +17,17 @@ pub struct Config {
     // pub google_client_id: String,
     // etc.
 
+    //AI Models 
+    pub ollama_url: String,
+    pub ollama_model: String, 
+    pub anthropic_api_key: Option<String>,
+    pub claude_model: String,
+    pub grok_api_key: Option<String>,
+    pub grok_model: String,
+    pub ai_default_provider: String,
+    pub ai_analysis_batch_size: i32,
+    pub ai_analysis_enabled: bool,
+
     //Feed Settings
     pub max_feeds_per_user: i32,
     pub article_retention_days: i32,
@@ -50,6 +61,34 @@ impl Config {
             .unwrap_or_else(|_| "7".to_string())
             .parse()
             .expect("ARTICLE_RETENTION_DAYS must be a valid number");
+        let ollama_url = env::var("OLLAMA_URL")
+            .unwrap_or_else(|_| "http://localhost:11434".to_string());
+            
+        let ollama_model = env::var("OLLAMA_MODEL")
+            .unwrap_or_else(|_| "llama3".to_string());
+
+        let anthropic_api_key: Option<String> = env::var("ANTHROPIC_API_KEY").ok();
+
+        let claude_model = env::var("CLAUDE_MODEL")
+            .unwrap_or_else(|_| "claude-sonnet-4-20250514".to_string());
+
+        let grok_api_key: Option<String> = env::var("GROK_API_KEY").ok();
+
+        let grok_model = env::var("GROK_MODEL")
+            .unwrap_or_else(|_| "grok-4.1-fast".to_string());
+        
+        let ai_default_provider = env::var("AI_DEFAULT_PROVIDER")
+            .unwrap_or_else(|_| "ollama".to_string());
+
+        let ai_analysis_batch_size: i32 = env::var("AI_ANALYSIS_BATCH_SIZE")
+            .unwrap_or_else(|_| "10".to_string())
+            .parse()
+            .expect("AI_ANALYSIS_BATCH_SIZE must be a valid number");
+        
+        let ai_analysis_enabled: bool = env::var("AI_ANALYSIS_ENABLED")
+            .unwrap_or_else(|_| "true".to_string())
+            .parse()
+            .expect("AI_ANALYSIS_ENABLED must be true or false");
 
         Self { 
             database_url,
@@ -59,6 +98,15 @@ impl Config {
             jwt_expiration_hours,
             max_feeds_per_user,
             article_retention_days,
+            ollama_url,
+            ollama_model,
+            anthropic_api_key,
+            claude_model,
+            grok_api_key,
+            grok_model,
+            ai_default_provider,
+            ai_analysis_batch_size,
+            ai_analysis_enabled,
         }
     }
 }

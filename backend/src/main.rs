@@ -8,8 +8,14 @@ use sqlx::PgPool;
 use tower_http::trace::TraceLayer;    
 
 
+mod auth;
 mod config;
+mod db;
 mod routes;
+mod models;
+mod errors;
+mod services;
+
 use config::Config;
 
 pub struct AppState {
