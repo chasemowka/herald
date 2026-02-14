@@ -21,6 +21,7 @@ pub struct ArticleWithStatus {
     pub created_at: DateTime<Utc>,
     pub is_read: bool,
     pub is_saved: bool,
+    pub feed_title: Option<String>,
 }
 
 /// List articles from user's subscribed feeds with read/saved status
@@ -55,7 +56,8 @@ pub async fn list_articles_for_user(
                     a.guid,
                     a.created_at,
                     COALESCE(ua.is_read, FALSE) as "is_read!",
-                    COALESCE(ua.is_saved, FALSE) as "is_saved!"
+                    COALESCE(ua.is_saved, FALSE) as "is_saved!",
+                    f.title as feed_title
                 FROM articles a
                 INNER JOIN feeds f ON a.feed_id = f.id
                 INNER JOIN topics t ON f.topic_id = t.id
@@ -90,7 +92,8 @@ pub async fn list_articles_for_user(
                     a.guid,
                     a.created_at,
                     COALESCE(ua.is_read, FALSE) as "is_read!",
-                    COALESCE(ua.is_saved, FALSE) as "is_saved!"
+                    COALESCE(ua.is_saved, FALSE) as "is_saved!",
+                    f.title as feed_title
                 FROM articles a
                 INNER JOIN feeds f ON a.feed_id = f.id
                 INNER JOIN topics t ON f.topic_id = t.id
@@ -125,7 +128,8 @@ pub async fn list_articles_for_user(
                 a.guid,
                 a.created_at,
                 COALESCE(ua.is_read, FALSE) as "is_read!",
-                COALESCE(ua.is_saved, FALSE) as "is_saved!"
+                COALESCE(ua.is_saved, FALSE) as "is_saved!",
+                f.title as feed_title
             FROM articles a
             INNER JOIN feeds f ON a.feed_id = f.id
             INNER JOIN user_feeds uf ON f.id = uf.feed_id AND uf.user_id = $1
@@ -157,7 +161,8 @@ pub async fn list_articles_for_user(
                 a.guid,
                 a.created_at,
                 COALESCE(ua.is_read, FALSE) as "is_read!",
-                COALESCE(ua.is_saved, FALSE) as "is_saved!"
+                COALESCE(ua.is_saved, FALSE) as "is_saved!",
+                f.title as feed_title
             FROM articles a
             INNER JOIN feeds f ON a.feed_id = f.id
             INNER JOIN user_feeds uf ON f.id = uf.feed_id AND uf.user_id = $1

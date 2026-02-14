@@ -85,7 +85,7 @@ export function useArticles() {
 
   const markRead = useCallback(async (articleId, isRead = true) => {
     try {
-      await api.patch(`/articles/${articleId}`, { is_read: isRead });
+      await api.patch(`/articles/${articleId}/read`, { is_read: isRead });
 
       setArticles((prev) =>
         prev.map((article) =>
@@ -100,21 +100,18 @@ export function useArticles() {
 
   const toggleSave = useCallback(async (articleId) => {
     try {
-      const article = articles.find((a) => a.id === articleId);
-      const newSavedState = !article?.is_saved;
-
-      await api.patch(`/articles/${articleId}`, { is_saved: newSavedState });
+      const response = await api.patch(`/articles/${articleId}/save`);
 
       setArticles((prev) =>
         prev.map((a) =>
-          a.id === articleId ? { ...a, is_saved: newSavedState } : a
+          a.id === articleId ? { ...a, is_saved: response.is_saved } : a
         )
       );
     } catch (err) {
       setError(err.message);
       throw err;
     }
-  }, [articles]);
+  }, []);
 
   return {
     articles,

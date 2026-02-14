@@ -99,15 +99,15 @@ export function Feed() {
   // Build topics list for navigation
   const navTopics = userTopics.length > 0
     ? userTopics.map(t => ({
-        id: t.id || t,
-        name: t.name || t,
-        slug: t.id || t,
+        id: t.id,
+        name: t.name,
+        slug: t.slug,
       }))
     : [
         { id: 'tech', name: 'Tech', slug: 'tech' },
-        { id: 'world', name: 'World', slug: 'world' },
+        { id: 'world-news', name: 'World News', slug: 'world-news' },
         { id: 'sports', name: 'Sports', slug: 'sports' },
-        { id: 'ai', name: 'AI/ML', slug: 'ai' },
+        { id: 'ai-ml', name: 'AI/ML', slug: 'ai-ml' },
       ];
 
   return (
@@ -125,9 +125,9 @@ export function Feed() {
       {/* Main content area */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Toolbar row */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="font-display text-2xl font-bold text-herald-text tracking-tight">
+            <h1 className="font-display text-3xl font-bold text-herald-text tracking-tight">
               {activeTopic === 'all'
                 ? 'All Stories'
                 : activeTopic === 'saved'

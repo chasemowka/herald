@@ -28,7 +28,7 @@ export function useTopics() {
     setError(null);
 
     try {
-      const response = await api.get('/user/topics');
+      const response = await api.get('/topics/mine');
       setUserTopics(response.topics || response);
       return response;
     } catch (err) {
@@ -44,7 +44,7 @@ export function useTopics() {
     setError(null);
 
     try {
-      const response = await api.put('/user/topics', { topic_ids: topicIds });
+      const response = await api.put('/topics/mine', { topic_ids: topicIds });
       setUserTopics(response.topics || topicIds);
       return response;
     } catch (err) {

@@ -282,6 +282,15 @@ function ArticlePreview({
   const formattedDate = formatDate(published_at);
   const displayContent = content || summary;
 
+  // Strip HTML tags for plain text rendering
+  const stripHtml = (html) => {
+    if (!html) return '';
+    return html.replace(/<[^>]*>/g, '').trim();
+  };
+
+  // Check if a string contains HTML tags
+  const containsHtml = (str) => str && /<[a-z][\s\S]*>/i.test(str);
+
   return (
     <>
       {/* Backdrop */}
@@ -353,7 +362,7 @@ function ArticlePreview({
 
         {/* Content area - scrollable */}
         <div className="flex-1 overflow-y-auto">
-          <div className="px-6 py-8 max-w-prose mx-auto">
+          <div className="px-6 py-10 max-w-prose mx-auto">
             {/* Title */}
             <h1 className="
               font-display
@@ -371,10 +380,10 @@ function ArticlePreview({
             )}
 
             {/* Content */}
-            {displayContent && (
-              <div className="text-herald-text-secondary leading-relaxed">
-                {/* If content is HTML, render it; otherwise, plain text */}
-                {content ? (
+            {displayContent ? (
+              <div className="text-herald-text leading-relaxed">
+                {/* Render as HTML if content exists or summary contains HTML */}
+                {(content || containsHtml(summary)) ? (
                   <div
                     className="
                       prose prose-lg prose-invert
@@ -394,18 +403,28 @@ function ArticlePreview({
                       prose-blockquote:text-herald-text-secondary
                       max-w-none
                     "
-                    dangerouslySetInnerHTML={{ __html: content }}
+                    dangerouslySetInnerHTML={{ __html: content || summary }}
                   />
                 ) : (
-                  <p className="text-lg leading-relaxed">{summary}</p>
+                  <p className="text-lg leading-relaxed text-herald-text-secondary">{summary}</p>
                 )}
+              </div>
+            ) : (
+              /* No content or summary - show fallback */
+              <div className="text-center py-8">
+                <p className="text-herald-text-secondary mb-2">
+                  No preview available for this article.
+                </p>
+                <p className="text-sm text-herald-text-muted">
+                  Click "Open Original" below to read the full article.
+                </p>
               </div>
             )}
 
             {/* Read more prompt if only summary */}
             {!content && summary && (
               <div className="mt-8 pt-6 border-t border-herald-border">
-                <p className="text-sm text-herald-text-muted mb-4">
+                <p className="text-sm text-herald-text-secondary mb-4">
                   This is a preview. Read the full article on the original site.
                 </p>
               </div>
@@ -415,8 +434,8 @@ function ArticlePreview({
 
         {/* Footer actions */}
         <footer className="
-          px-6 py-4
-          border-t border-herald-border
+          px-6 py-5
+          border-t-2 border-herald-accent/30
           bg-herald-surface
         ">
           <div className="flex flex-wrap items-center gap-3">
@@ -426,6 +445,7 @@ function ArticlePreview({
               icon={<ExternalLinkIcon className="w-4 h-4" />}
               label="Open Original"
               variant="primary"
+              className="text-base py-3 px-6 shadow-[0_0_15px_rgba(0,240,255,0.3)]"
             />
 
             {/* Mark as read/unread */}

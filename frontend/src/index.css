@@ -299,3 +299,82 @@ body {
 .animate-pulse {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
+
+/* Article preview - hide images (text-only design) */
+.prose img,
+.prose picture,
+.prose video,
+.prose figure {
+  display: none !important;
+}
+
+/* Article preview content typography */
+.prose p {
+  margin-top: 1.25em;
+  margin-bottom: 1.25em;
+}
+
+.prose p:first-child {
+  margin-top: 0;
+}
+
+.prose p:last-child {
+  margin-bottom: 0;
+}
+
+.prose blockquote {
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+  padding-left: 1em;
+}
+
+.prose ul, .prose ol {
+  margin-top: 1.25em;
+  margin-bottom: 1.25em;
+}
+
+.prose li {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+/* Article content links - make them clearly interactive */
+.prose a {
+  color: var(--color-herald-accent);
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+
+.prose a:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* Style the "Read full article" and "Comments" links as button-like elements */
+.prose p:last-child a,
+.prose p:nth-last-child(2) a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  margin-top: 0.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-herald-accent);
+  background: rgba(0, 240, 255, 0.08);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  border-radius: 0.375rem;
+  transition: all 0.2s ease;
+}
+
+.prose p:last-child a:hover,
+.prose p:nth-last-child(2) a:hover {
+  background: rgba(0, 240, 255, 0.15);
+  border-color: rgba(0, 240, 255, 0.4);
+  text-decoration: none;
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.15);
+}

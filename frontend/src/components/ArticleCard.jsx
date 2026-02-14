@@ -29,6 +29,16 @@ function formatRelativeTime(date) {
 }
 
 /**
+ * Strips HTML tags from a string
+ * @param {string} html - HTML string to strip
+ * @returns {string} Plain text
+ */
+function stripHtml(html) {
+  if (!html) return '';
+  return html.replace(/<[^>]*>/g, '').trim();
+}
+
+/**
  * BookmarkIcon component - filled or outline based on saved state
  */
 function BookmarkIcon({ filled = false, className = '' }) {
@@ -206,11 +216,11 @@ function ArticleCard({ article, onSelect, onToggleSave, isSelected = false }) {
       {summary && (
         <p
           className={`
-            text-sm leading-relaxed line-clamp-2
+            text-sm leading-relaxed line-clamp-3
             ${!is_read ? 'text-herald-text-secondary' : 'text-herald-text-muted'}
           `}
         >
-          {summary}
+          {stripHtml(summary)}
         </p>
       )}
 
@@ -254,7 +264,7 @@ function ArticleCard({ article, onSelect, onToggleSave, isSelected = false }) {
             herald-press
             ${is_saved
               ? 'text-herald-warm hover:bg-herald-warm/10'
-              : 'text-herald-text-muted hover:text-herald-text-secondary hover:bg-herald-surface-hover opacity-0 group-hover:opacity-100'
+              : 'text-herald-text-muted hover:text-herald-text-secondary hover:bg-herald-surface-hover opacity-40 group-hover:opacity-100'
             }
           `}
         >
